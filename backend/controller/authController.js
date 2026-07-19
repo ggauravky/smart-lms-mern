@@ -1,7 +1,7 @@
 import User from "../models/userModel.js"
 import validator from "validator"
 import bcrypt from "bcryptjs"
-import { genToken } from "../utils/genToken.js"
+import genToken from "../config/token.js"
 
 export const signup = async (req, res) => {
     try {
@@ -24,7 +24,7 @@ export const signup = async (req, res) => {
             role
         })
         let token = await genToken(user._id)
-        req.cookie("token", token, {
+        res.cookie("token", token, {
             httpOnly: true,
             security:false,
             sameSite: "Strict",
@@ -49,7 +49,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" })
         }
          let token = await genToken(user._id)
-        req.cookie("token", token, {
+        res.cookie("token", token, {
             httpOnly: true,
             security:false,
             sameSite: "Strict",
