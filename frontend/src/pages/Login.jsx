@@ -4,14 +4,41 @@ import { IoEyeOutline } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
 import logo from "../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import { serverUrl } from "../App";
+
 
 function Login() {
   const [show, setShow] = useState(false);
+   const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+      const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  const handleLogin=async()=>{
+    setLoading(true)
+    try{
+      const result=await axios.post(serverUrl + "/api/auth/login", {email, password},{withCredentials:true})
+
+      console.log(result.data)
+      setLoading(false)
+      toast.success("Login Successfully")
+      navigate("/")
+
+    }catch(error){
+      console.log(error)
+         setLoading(false)
+         toast.error(error.rsponse.data.message)
+
+
+    }
+
+  }
 
   return (
     <div className="bg-[#dddbdb] w-screen h-screen flex items-center justify-center">
-      <form className="w-[90%] md:w-200 h-150 bg-[white] shadow-xl rounded-2xl flex">
+      <form className="w-[90%] md:w-200 h-150 bg-[white] shadow-xl rounded-2xl flex" onSubmit={(e)=>e.preventDefault()}>
         {/* left div */}
         <div className="md:w-1/2 w-full h-full flex flex-col items-center justify-center gap-3">
           <div>
@@ -31,7 +58,7 @@ function Login() {
               id="email"
               type="email"
               className="border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]"
-              placeholder="enter email"
+              placeholder="enter email" onChange={(e) => setEmail(e.target.value)} value={email}
             />
           </div>
 
@@ -43,7 +70,7 @@ function Login() {
               id="password"
               type={show ? "text" : "password"}
               className="border-1 w-[100%] h-[35px] border-[#e7e6e6] text-[15px] px-[20px]"
-              placeholder="enter password"
+              placeholder="enter password" onChange={(e) => setPassword(e.target.value)} value={password}
             />
             {!show ? (
               <IoEyeOutline
@@ -58,8 +85,8 @@ function Login() {
             )}
           </div>
 
-          <button className="w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]">
-            Login
+          <button className="w-[80%] h-[40px] bg-black text-white cursor-pointer flex items-center justify-center rounded-[5px]" disabled={loading} onClick={handleLogin}>
+           {loading ? <ClipLoader size={30} color='white'/>:"Login" }
           </button>
           <span className="text-[#6f6f6f] cursor-pointer" onClick={() => navigate("/forgot-password")}>
             Forget Password?
@@ -74,7 +101,7 @@ function Login() {
           </div>
 
           <div className="w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center">
-            <img src={google} alt="Google" className="w-[25px]" />
+            <img src={google} alt="oogle" className="w-[25px]" />
             <span className="text-[18px] text-gray-500">oogle</span>
           </div>
 
