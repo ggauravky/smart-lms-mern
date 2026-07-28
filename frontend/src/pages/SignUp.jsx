@@ -89,7 +89,7 @@ function SignUp() {
         </div>
         <div className='w-[80%] h-[40px] border-1 border-[black] rounded-[5px] flex items-center justify-center'>
         <img src={google} alt="Google" className="w-[25px]" />
-        <span className='text-[18px] text-gray-500'>Google</span>
+        <span className='text-[18px] text-gray-500'>oogle</span>
         </div>
         <div className='text-[#6f6f6f]'> Already Have an account?<span className='underline-offset-1 text-[black] underline cursor-pointer' onClick={()=>navigate("/login")}> Login</span> </div>
         </div>
