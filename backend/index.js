@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/connectDB.js';
 import cookieParser from 'cookie-parser';
 import authRouter from './route/authRoute.js';
+import userRouter from './route/userRoute.js';
 import cors from 'cors';
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors({
  
 
 app.use('/api/auth',authRouter)
+app.use('/api/user',userRouter)
 
 app.get('/',(req,res)=>{
     res.send('Hello World')
