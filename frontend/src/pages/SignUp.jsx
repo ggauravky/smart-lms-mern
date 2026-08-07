@@ -8,10 +8,12 @@ import axios from 'axios'
 import { ClipLoader } from "react-spinners";
 import { serverUrl } from '../App';
 import { toast } from "react-toastify";
+import { useDispatch } from 'react-redux';
 
 function SignUp() {
   const[show, setShow] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -33,7 +35,7 @@ function SignUp() {
         },
         { withCredentials: true },
       );
-      console.log(result.data);
+      dispatch(setUserData(result.data));
       setLoading(false);
 
       navigate ("/")
