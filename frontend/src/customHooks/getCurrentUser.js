@@ -1,9 +1,10 @@
 import React from 'react'
-import dispatch from 'react-redux'
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { serverUrl } from '../config';
+import { serverUrl } from '../App';
+import { setUserData } from '../redux/userSlice';
+
 
 const getCurrentUser = () => {
     const dispatch = useDispatch();
