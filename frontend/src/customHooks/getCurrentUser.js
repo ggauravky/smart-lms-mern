@@ -16,7 +16,9 @@ useEffect(() => {
             });
             dispatch(setUserData(result.data));
         } catch (error) {
-            console.error('Error fetching user:', error);
+            if (error.response?.status !== 401) {
+                console.error('Error fetching user:', error);
+            }
             dispatch(setUserData(null));
         }
     };
