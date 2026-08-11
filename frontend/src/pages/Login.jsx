@@ -9,6 +9,7 @@ import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { serverUrl } from "../App";
 import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 
 
 function Login() {
@@ -31,8 +32,8 @@ function Login() {
 
     }catch(error){
       console.log(error)
-         setLoading(false)
-         toast.error(error.response.data.message)
+      setLoading(false)
+      toast.error(error.response?.data?.message || "Login failed. Please try again.")
     }
   }
 
@@ -118,7 +119,7 @@ function Login() {
 
         {/* right div */}
         <div className="w-1/2 h-full rounded-r-2xl bg-[black] md:flex items-center justify-center flex-col hidden">
-          <img src={logo} alt="Logo" className="w-75 h-75" />
+          <img src={logo} alt="Logo" className="w-75 h-75 cursor-pointer" onClick={() => navigate("/")} />
         </div>
       </form>
     </div>
