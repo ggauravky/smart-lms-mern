@@ -16,17 +16,27 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const { name, email, description } = req.body;
-    let photoUrl;
+    const userId = req.userId; // ✅ Fixed: using req.userId from isAuth middleware
+    const { name, description } = req.body;
+
+    let updateData = {};
+    if (name) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+
+    // Upload image to Cloudinary only if an image file was attached
     if (req.file && req.file.path) {
-      photoUrl = await uploadOnCloudinary(req.file.path);
+      const photoUrl = await uploadOnCloudinary(req.file.path);
+      if (photoUrl && typeof photoUrl === "string") {
+        updateData.photoUrl = photoUrl; // ✅ Matches photoUrl in User model schema
+      }
     }
+
     const user = await User.findByIdAndUpdate(
       userId,
-      { name, email, description, photo: photoUrl },
-      { new: true },
-    );
+      updateData,
+      { new: true }
+    ).select("-password");
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -35,6 +45,6 @@ export const updateProfile = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: `Error updating profile. ${error.message}` });
+      .json({ message: `Error updating profile: ${error.message}` });
   }
 };

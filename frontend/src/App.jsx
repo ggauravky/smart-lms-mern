@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import Profile from './pages/Profile';
 import { Navigate } from 'react-router-dom';
 import ForgetPassword from './pages/ForgetPassword';
+import EditProfile from './pages/EditProfile';
 
 export const serverUrl = "http://localhost:8000";
 
@@ -33,6 +34,10 @@ function App() {
         <Route
           path="/forget-password"
           element={<ForgetPassword />}
+        />
+        <Route
+          path="/editprofile"
+          element={userData ? <EditProfile /> : <Navigate to={"/signup"} />}
         />
       </Routes>
     </>

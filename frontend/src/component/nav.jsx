@@ -1,7 +1,7 @@
-import {React,useState} from "react";
+import { React, useState } from "react";
 import logo from "../assets/logo.png";
 import { IoPersonCircle } from "react-icons/io5";
-import { useSelector , useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setUserData } from "../redux/userSlice";
@@ -14,21 +14,22 @@ function Nav() {
   const { userData } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [show,setShow] = useState(false);
-  const [showHam,setShowHam] = useState(false);
+  const [show, setShow] = useState(false);
+  const [showHam, setShowHam] = useState(false);
 
   const handleLogout = async () => {
     try {
-      const result = await axios.get(serverUrl + "/api/auth/logout", { withCredentials: true });
+      const result = await axios.get(serverUrl + "/api/auth/logout", {
+        withCredentials: true,
+      });
       dispatch(setUserData(null));
       console.log(result.data);
       toast.success("Logged out successfully");
-
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Logout failed");
     }
-  }
+  };
 
   return (
     <div className="relative w-full h-[86px] bg-[#b9b9b9] flex items-center justify-between px-[50px]">
@@ -40,14 +41,18 @@ function Nav() {
       />
 
       <div className="flex items-center justify-center gap-4 hidden lg:flex">
-        {!userData && (
+        {!userData ? (
           <IoPersonCircle
             className="w-[50px] h-[50px] fill-black cursor-pointer"
             onClick={() => navigate("/login")}
           />
-        )}
-
-        {userData && (
+        ) : userData.photoUrl ? (
+          <img
+            src={userData.photoUrl}
+            className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
+            onClick={() => setShow((prev) => !prev)}
+          />
+        ) : (
           <div
             className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
             onClick={() => setShow((prev) => !prev)}
@@ -55,6 +60,7 @@ function Nav() {
             {userData?.name?.slice(0, 1).toUpperCase()}
           </div>
         )}
+
 
         {userData?.role === "educator" && (
           <div className="px-[20px] py-[10px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light cursor-pointer">
@@ -117,15 +123,29 @@ function Nav() {
           onClick={() => setShowHam((prev) => !prev)}
         />
 
-        {!userData && (
-          <IoPersonCircle className="w-[50px] h-[50px] fill-black cursor-pointer" />
-        )}
-
-        {userData && (
-          <div className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer">
+        {!userData ? (
+          <IoPersonCircle
+            className="w-[50px] h-[50px] fill-black cursor-pointer"
+            onClick={() => {
+              navigate("/login");
+              setShowHam(false);
+            }}
+          />
+        ) : userData?.photoUrl ? (
+          <img
+            src={userData.photoUrl}
+            className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
+            onClick={() => setShowHam((prev) => !prev)}
+          />
+        ) : (
+          <div
+            className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
+            onClick={() => setShowHam((prev) => !prev)}
+          >
             {userData?.name?.slice(0, 1).toUpperCase()}
           </div>
         )}
+
         <div
           className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer"
           onClick={() => {
