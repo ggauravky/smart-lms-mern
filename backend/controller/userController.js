@@ -16,7 +16,7 @@ export const getCurrentUser = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const userId = req.userId; // ✅ Fixed: using req.userId from isAuth middleware
+    const userId = req.userId; 
     const { name, description } = req.body;
 
     let updateData = {};
@@ -27,7 +27,7 @@ export const updateProfile = async (req, res) => {
     if (req.file && req.file.path) {
       const photoUrl = await uploadOnCloudinary(req.file.path);
       if (photoUrl && typeof photoUrl === "string") {
-        updateData.photoUrl = photoUrl; // ✅ Matches photoUrl in User model schema
+        updateData.photoUrl = photoUrl;
       }
     }
 
