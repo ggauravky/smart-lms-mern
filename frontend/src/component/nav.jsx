@@ -46,9 +46,9 @@ function Nav() {
             className="w-[50px] h-[50px] fill-black cursor-pointer"
             onClick={() => navigate("/login")}
           />
-        ) : userData.photoUrl ? (
+        ) : userData?.photoUrl ? (
           <img
-            src={userData.photoUrl}
+            src={userData?.photoUrl}
             className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
             onClick={() => setShow((prev) => !prev)}
           />
