@@ -17,7 +17,6 @@ function Home() {
           className="object-cover md:object-fill [100%] lg:h-[100%] h- [50vh]"
           alt=""
         />{" "}
-        W-
         <span className="lg:text-[70px] absolute md:text-[40px] absolute lg:top-[10%] top-[15%] w-[100%] flex items-center justify-center text-white font-bold text-[20px]">
           Grow Your Skills to Advance{" "}
         </span>

@@ -63,7 +63,7 @@ function Nav() {
 
 
         {userData?.role === "educator" && (
-          <div className="px-[20px] py-[10px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light cursor-pointer">
+          <div className="px-[20px] py-[10px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light cursor-pointer" onClick={()=>navigate("/dashboard")}>
             Dashboard
           </div>
         )}
@@ -158,7 +158,7 @@ function Nav() {
           My Courses
         </div>
         {userData?.role === "educator" && (
-          <div className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer">
+          <div className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer" onClick={()=>navigate("/dashboard")}>
             Dashboard
           </div>
         )}
