@@ -10,8 +10,8 @@ export const createCourse = async (req, res) => {
     }
     const course = await Course.create({
       title,
-      description,
-      creator: req.user._id,
+      category,
+      creator: req.userId,
     });
     res.status(201).json(course);
   } catch (error) {
