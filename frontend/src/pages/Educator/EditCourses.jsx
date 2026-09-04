@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import axios from "axios";
 import { serverUrl } from "../../server";
 import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setCourseData } from "../../redux/courseSlice";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const EditCourses = () => {
@@ -28,6 +30,10 @@ const EditCourses = () => {
 
   const [loading, setLoading] = useState(false);
   const [loading1, setLoading1] = useState(false);
+
+  const dispatch = useDispatch();
+  const {courseData} = useSelector(state => state.course)
+
   const handleThumbnail = (e) => {
     const file = e.target.files[0];
     setBackendImage(file);
@@ -75,7 +81,18 @@ const EditCourses = () => {
     formData.append("isPublished", isPublished);
     try {
       const result = await axios.post(serverUrl + `/api/course/editcourse/${courseId}`, formData, { withCredentials: true });
-      console.log(result);
+      console.log(result.data);
+      const updateData=result.data;
+      if(updateData.isPublished){
+        const updatedCourses = courseData.map(c => c._id === courseId ? updateData : c);
+        if(!courseData.some(c => c._id === courseId)){
+          updatedCourses.push(updateData);
+        }
+        dispatch(setCourseData(updatedCourses));
+      }else{
+        const filteredCourses = courseData.filter(c => c._id !== courseId);
+        dispatch(setCourseData(filteredCourses));
+      }
       setLoading(false);
       toast.success("Course Updated Successfully");
       navigate("/courses");
@@ -90,7 +107,9 @@ const EditCourses = () => {
     setLoading1(true);
     try {
       const result = await axios.delete(serverUrl + `/api/course/remove/${courseId}`, { withCredentials: true });
-      console.log(result);
+      console.log(result.data);
+      const filteredCourses = courseData.filter(c => c._id !== courseId);
+      dispatch(setCourseData(filteredCourses));
       setLoading1(false);
       toast.success("Course Removed Successfully");
       navigate("/courses");
