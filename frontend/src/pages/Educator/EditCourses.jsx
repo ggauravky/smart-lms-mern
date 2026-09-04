@@ -27,6 +27,7 @@ const EditCourses = () => {
   const [backendImage, setBackendImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [loading1, setLoading1] = useState(false);
   const handleThumbnail = (e) => {
     const file = e.target.files[0];
     setBackendImage(file);
@@ -79,10 +80,25 @@ const EditCourses = () => {
       toast.success("Course Updated Successfully");
       navigate("/courses");
 
-    }catch (err) {
+    } catch (err) {
       console.log(err);
       setLoading(false);
       toast.error("Error while updating course");
+    }
+  }
+  const handleRemoveCourse = async () => {
+    setLoading1(true);
+    try {
+      const result = await axios.delete(serverUrl + `/api/course/remove/${courseId}`, { withCredentials: true });
+      console.log(result);
+      setLoading1(false);
+      toast.success("Course Removed Successfully");
+      navigate("/courses");
+
+    } catch (err) {
+      console.log(err);
+      setLoading1(false);
+      toast.error("Error while removing course");
     }
   }
 
@@ -123,7 +139,7 @@ const EditCourses = () => {
               Click to UnPublish
             </button>
           )}
-          <button className="bg-red-100 text-red-600 px-4 py-2 rounded-md border cursor-pointer">
+          <button className="bg-red-100 text-red-600 px-4 py-2 rounded-md border cursor-pointer" onClick={handleRemoveCourse}>
             Remove Course
           </button>
         </div>

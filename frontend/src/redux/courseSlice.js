@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const courseSlice=createSlice({
     name:"course",
     initialState:{
-        creatorCourseData:null;
+        creatorCourseData:null,
         courseData:null
         
     },

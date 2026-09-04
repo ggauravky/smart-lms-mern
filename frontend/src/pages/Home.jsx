@@ -6,6 +6,7 @@ import ai from '../assets/ai.png'
 import ai1 from '../assets/SearchAi.png'
 import Logos from '../component/Logos';
 import ExploreCourses from '../component/ExploreCourses';
+import CardPage from '../component/CardPage';
 
 function Home() {
   return (
@@ -36,6 +37,7 @@ function Home() {
       </div>
       <Logos />
       <ExploreCourses />
+      <CardPage />
     </div>
   );
 }
