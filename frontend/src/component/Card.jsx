@@ -1,6 +1,7 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import emptyImg from "../assets/empty.jpg";
 const CourseCard = ({ thumbnail, title, category, price, id, reviews }) => {
     const navigate = useNavigate()
     const calculateAverageRating = (reviews) => {
@@ -17,7 +18,7 @@ const CourseCard = ({ thumbnail, title, category, price, id, reviews }) => {
         <div className="max-w-sm w-full bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-gray-300" onClick={() => navigate(`/viewcourse/${id}`)}>
             {/* Thumbnail */}
             <img
-                src={thumbnail}
+                src={thumbnail ?? emptyImg}
                 alt={title}
                 className="w-full h-48 object-cover"
             />
