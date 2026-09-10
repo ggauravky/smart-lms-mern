@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setCourseData } from "../../redux/courseSlice";
 import { ClipLoader } from "react-spinners";
+import CreateLecture from "./CreateLecture";
 
 const EditCourses = () => {
   const navigate = useNavigate();
@@ -153,7 +154,7 @@ const EditCourses = () => {
               Add Detail Information regarding the Course
             </h2>
           </div>
-          <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition text-sm cursor-pointer">
+          <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition text-sm cursor-pointer" onClick={() => navigate(`/createlecture/${courseId}`)}>
             Go to lecture page
           </button>
         </div>
