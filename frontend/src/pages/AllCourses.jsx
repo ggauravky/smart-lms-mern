@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Card from "../component/Card.jsx";
-import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaArrowLeftLong, FaFilter, FaXmark } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
 import Nav from '../component/Nav';
 import ai from '../assets/SearchAi.png';
@@ -57,12 +57,18 @@ function AllCourses() {
 
       {/* 2. Main Page Layout */}
       <div className="flex flex-1 relative">
-        {/* Mobile Filter Toggle Button */}
+        {/* Mobile Filter Floating Toggle Button */}
         <button
-          onClick={() => setIsSidebarVisible(prev => !prev)}
-          className="fixed bottom-6 right-6 z-50 bg-black text-white px-4 py-2.5 rounded-full shadow-lg md:hidden flex items-center gap-2 text-sm font-medium"
+          onClick={() => setIsSidebarVisible((prev) => !prev)}
+          className="fixed bottom-6 right-6 z-30 bg-black text-white px-4 py-2.5 rounded-full shadow-lg md:hidden flex items-center gap-2 text-sm font-medium hover:bg-gray-800 transition active:scale-95 cursor-pointer"
         >
-          {isSidebarVisible ? 'Hide Filters' : 'Filter Categories'}
+          <FaFilter className="w-3.5 h-3.5" />
+          <span>{isSidebarVisible ? "Hide Filters" : "Filter Categories"}</span>
+          {category.length > 0 && (
+            <span className="w-5 h-5 flex items-center justify-center text-xs bg-white text-black rounded-full font-bold">
+              {category.length}
+            </span>
+          )}
         </button>
 
         {/* Backdrop for mobile sidebar */}
@@ -75,21 +81,35 @@ function AllCourses() {
 
         {/* Sidebar */}
         <aside
-          className={`w-[260px] bg-white border-r border-gray-200 p-6 shrink-0
+          className={`w-[270px] bg-white border-r border-gray-200 p-6 shrink-0
             fixed md:sticky top-0 md:top-[86px] h-screen md:h-[calc(100vh-86px)] overflow-y-auto
             transition-transform duration-300 z-40
-            ${isSidebarVisible ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+            ${isSidebarVisible ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
         >
           {/* Header */}
-          <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-100">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate("/")}
+                className="p-1.5 hover:bg-gray-100 rounded-full transition cursor-pointer text-gray-700"
+                title="Back to Home"
+              >
+                <FaArrowLeftLong className="w-4 h-4" />
+              </button>
+              <h2 className="text-lg font-bold text-gray-800">
+                Filter by Category
+              </h2>
+            </div>
+
+            {/* Mobile close button */}
             <button
-              onClick={() => navigate("/")}
-              className="p-1.5 hover:bg-gray-100 rounded-full transition cursor-pointer text-gray-700"
-              title="Back to Home"
+              type="button"
+              onClick={() => setIsSidebarVisible(false)}
+              className="p-1.5 hover:bg-gray-100 rounded-full transition text-gray-500 hover:text-gray-800 md:hidden cursor-pointer"
+              title="Close Filters"
             >
-              <FaArrowLeftLong className="w-4 h-4" />
+              <FaXmark className="w-5 h-5" />
             </button>
-            <h2 className="text-lg font-bold text-gray-800">Filter by Category</h2>
           </div>
 
           {/* Search with AI */}
@@ -126,25 +146,55 @@ function AllCourses() {
           {category.length > 0 && (
             <button
               onClick={() => setCategory([])}
-              className="mt-6 w-full py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition"
+              className="mt-6 w-full py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition cursor-pointer"
             >
               Clear All Filters
             </button>
           )}
+
+          {/* Mobile Apply Button */}
+          <div className="mt-6 pt-4 border-t border-gray-100 md:hidden">
+            <button
+              type="button"
+              onClick={() => setIsSidebarVisible(false)}
+              className="w-full py-2.5 bg-black text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition cursor-pointer"
+            >
+              Apply Filters ({filterCourses?.length || 0})
+            </button>
+          </div>
         </aside>
 
         {/* Main Courses Area */}
         <main className="flex-1 p-6 md:p-8">
           <div className="max-w-7xl mx-auto">
             {/* Title & Count Header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 gap-3">
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">All Courses</h1>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  All Courses
+                </h1>
                 <p className="text-sm text-gray-500 mt-1">
-                  Showing {filterCourses?.length || 0} course{filterCourses?.length === 1 ? '' : 's'}
-                  {category.length > 0 && ` filtered by ${category.length} categor${category.length === 1 ? 'y' : 'ies'}`}
+                  Showing {filterCourses?.length || 0} course
+                  {filterCourses?.length === 1 ? "" : "s"}
+                  {category.length > 0 &&
+                    ` • filtered by ${category.length} categor${category.length === 1 ? "y" : "ies"}`}
                 </p>
               </div>
+
+              {/* Mobile Filter Button in Header */}
+              <button
+                type="button"
+                onClick={() => setIsSidebarVisible(true)}
+                className="md:hidden flex items-center gap-2 px-3.5 py-2 bg-white border border-gray-300 hover:border-black text-gray-800 rounded-xl text-sm font-medium shadow-sm transition active:scale-95 shrink-0 cursor-pointer"
+              >
+                <FaFilter className="w-3.5 h-3.5 text-gray-600" />
+                <span>Filters</span>
+                {category.length > 0 && (
+                  <span className="w-5 h-5 flex items-center justify-center text-xs bg-black text-white rounded-full font-semibold">
+                    {category.length}
+                  </span>
+                )}
+              </button>
             </div>
 
             {/* Responsive Courses Grid */}
@@ -164,7 +214,9 @@ function AllCourses() {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-gray-200 p-8 shadow-sm">
-                <p className="text-lg font-semibold text-gray-700">No courses found</p>
+                <p className="text-lg font-semibold text-gray-700">
+                  No courses found
+                </p>
                 <p className="text-sm text-gray-500 mt-1 max-w-sm">
                   {category.length > 0
                     ? "No courses match the selected category filters."
