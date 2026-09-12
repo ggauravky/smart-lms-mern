@@ -10,7 +10,7 @@ import CardPage from '../component/CardPage';
 import { useNavigate } from 'react-router-dom'
 
 function Home() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="w-[100%] overflow-hidden">
       <div className="w-[100%] lg:h-[140vh] h-[70vh] relative">
@@ -37,6 +37,7 @@ function Home() {
           </button>
         </div>
       </div>
+
       <Logos />
       <ExploreCourses />
       <CardPage />
