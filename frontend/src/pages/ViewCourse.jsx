@@ -3,6 +3,8 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 
 function ViewCourse() {
   const navigate = useNavigate();
+  const {courseId} = useParams()
+  const {courseData} = useSelector((state) => state.course)
 
   return (
     <div  className='min-h-screen bg-gray-50 p-6'>
