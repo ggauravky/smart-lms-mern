@@ -20,6 +20,7 @@ const courseSlice=createSlice({
     }
     }
 })
-
-export const { setCreatorCourseData, setCourseData } = courseSlice.actions;
+export const {setCreatorCourseData} = courseSlice.actions
+export const { setCourseData} = courseSlice.actions
+export const {setSelectedCourse} = courseSlice.actions
 export default courseSlice.reducer;
