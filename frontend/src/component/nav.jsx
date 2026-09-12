@@ -108,24 +108,30 @@ function Nav() {
         )}
       </div>
 
-      {/* Mobile View */}
-
+      {/* Mobile View Hamburger Icon */}
       <RxHamburgerMenu
         className="w-[35px] h-[35px] cursor-pointer lg:hidden fill-black"
         onClick={() => setShowHam((prev) => !prev)}
       />
 
+      {/* Mobile Menu Fullscreen Overlay */}
       <div
-        className={`fixed top-0 left-0 w-screen h-screen bg-[#000000d6] flex items-center justify-center flex-col gap-5 z-10 lg:hidden ${showHam ? "translate-x-[0] transition duration-600" : "translate-x-[-100%] transition duration-600"}`}
+        className={`fixed inset-0 w-screen h-screen bg-black/95 backdrop-blur-md flex items-center justify-center flex-col gap-4 z-[999] lg:hidden transition-all duration-300 ${
+          showHam ? "opacity-100 pointer-events-auto translate-x-0" : "opacity-0 pointer-events-none -translate-x-full"
+        }`}
       >
-        <IoClose
-          className="w-[30px] h-[30px] fill-white absolute top-5 right-[4%] cursor-pointer"
-          onClick={() => setShowHam((prev) => !prev)}
-        />
+        <button
+          type="button"
+          aria-label="Close menu"
+          className="absolute top-6 right-6 p-2 text-white hover:bg-white/10 rounded-full transition cursor-pointer"
+          onClick={() => setShowHam(false)}
+        >
+          <IoClose className="w-7 h-7 text-white" />
+        </button>
 
         {!userData ? (
           <IoPersonCircle
-            className="w-[50px] h-[50px] fill-black cursor-pointer"
+            className="w-16 h-16 fill-white cursor-pointer hover:opacity-80 transition"
             onClick={() => {
               navigate("/login");
               setShowHam(false);
@@ -134,48 +140,76 @@ function Nav() {
         ) : userData?.photoUrl ? (
           <img
             src={userData.photoUrl}
-            className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
-            onClick={() => setShowHam((prev) => !prev)}
+            alt="Profile"
+            className="w-16 h-16 rounded-full text-white flex items-center justify-center border-2 border-white cursor-pointer object-cover"
+            onClick={() => setShowHam(false)}
           />
         ) : (
           <div
-            className="w-[50px] h-[50px] rounded-full text-white flex items-center justify-center text-[20px] border-2 bg-black border-white cursor-pointer"
-            onClick={() => setShowHam((prev) => !prev)}
+            className="w-16 h-16 rounded-full text-white flex items-center justify-center text-2xl font-bold border-2 border-white bg-gray-800 cursor-pointer"
+            onClick={() => setShowHam(false)}
           >
             {userData?.name?.slice(0, 1).toUpperCase()}
           </div>
         )}
 
-        <div
-          className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer"
+        <button
+          type="button"
+          className="w-[200px] h-[55px] border-2 border-white text-white bg-black hover:bg-gray-800 rounded-[10px] text-[18px] font-medium flex items-center justify-center cursor-pointer transition"
           onClick={() => {
             navigate("/profile");
+            setShowHam(false);
           }}
         >
           My Profile
-        </div>
-        <div className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer">
+        </button>
+
+        <button
+          type="button"
+          className="w-[200px] h-[55px] border-2 border-white text-white bg-black hover:bg-gray-800 rounded-[10px] text-[18px] font-medium flex items-center justify-center cursor-pointer transition"
+          onClick={() => {
+            navigate("/allcourses");
+            setShowHam(false);
+          }}
+        >
           My Courses
-        </div>
+        </button>
+
         {userData?.role === "educator" && (
-          <div className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer" onClick={()=>navigate("/dashboard")}>
+          <button
+            type="button"
+            className="w-[200px] h-[55px] border-2 border-white text-white bg-black hover:bg-gray-800 rounded-[10px] text-[18px] font-medium flex items-center justify-center cursor-pointer transition"
+            onClick={() => {
+              navigate("/dashboard");
+              setShowHam(false);
+            }}
+          >
             Dashboard
-          </div>
+          </button>
         )}
+
         {userData ? (
-          <span
-            className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer"
-            onClick={handleLogout}
+          <button
+            type="button"
+            className="w-[200px] h-[55px] border-2 border-white text-white bg-black hover:bg-gray-800 rounded-[10px] text-[18px] font-medium flex items-center justify-center cursor-pointer transition"
+            onClick={() => {
+              handleLogout();
+              setShowHam(false);
+            }}
           >
             LogOut
-          </span>
+          </button>
         ) : (
-          <span
-            className="w-[200px] h-[65px] border-2 border-white text-white bg-black rounded-[10px] text-[18px] font-light flex items-center justify-center cursor-pointer"
-            onClick={() => navigate("/login")}
+          <button
+            type="button"
+            className="w-[200px] h-[55px] border-2 border-white text-white bg-black hover:bg-gray-800 rounded-[10px] text-[18px] font-medium flex items-center justify-center cursor-pointer transition"
+            onClick={() => {
+              navigate("/login");
+              setShowHam(false);
+            }}
           >
             Login
-          </span>
+          </button>
         )}
       </div>
     </div>

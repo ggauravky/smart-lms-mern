@@ -1,6 +1,8 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Course from "../models/courseModel.js";
 import User from "../models/userModel.js";
+import Lecture from "../models/lectureModel.js";
+
 
 export const createCourse = async (req, res) => {
   try {
@@ -137,37 +139,32 @@ export const createLecture = async (req, res) => {
     if (!lectureTitle || !courseId) {
       return res.status(400).json({ message: "lecture title is required" });
     }
-    if (!lectureTitle || !courseId) {
-      return res.status(400).json({ message: "lecture title is required" });
-    }
     const lecture = await Lecture.create({lectureTitle});
     const course = await Course.findById(courseId);
     if (!course) {
-      course.lectures.push(lecture._id);
+      return res.status(404).json({ message: "Course not found" });
     }
+    course.lectures.push(lecture._id);
     await course.populate("lectures");
     await course.save();
-    return res.status(201).json({lecture, course});
+    return res.status(201).json({lecture, course, message: "Lecture created successfully"});
   } catch (error) {
     return res.status(500).json({ message: `Failed to create lecture ${error}` });
   }
 }
 
 export const getCourseLectures = async (req, res) => {
-  try{
+  try {
     const { courseId } = req.params;
     const course = await Course.findById(courseId).populate("lectures");
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
-    await course.populate("lectures");
-    await course.save();
-    return res.status(200).json(course.lectures);
-
-  }catch(error){
+    return res.status(200).json({ lectures: course.lectures || [] });
+  } catch (error) {
     return res.status(500).json({ message: `Failed to get course lectures ${error}` });
   }
-}
+};
 
 export const editLecture = async (req, res) => {
   try {
@@ -177,7 +174,7 @@ export const editLecture = async (req, res) => {
     if (!lecture) {
       return res.status(404).json({ message: "Lecture not found" });
     }
-    if (!lectureTitle && !isPreviewFree) {
+    if (!lectureTitle && isPreviewFree === undefined && !req.file) {
       return res.status(400).json({ message: "At least one field is required for update" });
     }
     let videoUrl;
@@ -188,7 +185,9 @@ export const editLecture = async (req, res) => {
     if (lectureTitle) {
       lecture.lectureTitle = lectureTitle;
     }
-    lecture.isPreviewFree = isPreviewFree;
+    if (isPreviewFree !== undefined) {
+      lecture.isPreviewFree = isPreviewFree === "true" || isPreviewFree === true;
+    }
     await lecture.save();
     return res.status(200).json(lecture);
   } catch (error) {
@@ -203,10 +202,9 @@ export const removeLecture = async (req, res) => {
     if (!lecture) {
       return res.status(404).json({ message: "Lecture not found" });
     }
-    await lecture.updateOne(
-      {lectures:lectureId },
-      {$pull: { lectures: lectureId } }
-    );
+    await Course.findByIdAndUpdate(courseId, {
+      $pull: { lectures: lectureId }
+    });
     return res.status(200).json({ message: "Lecture Removed Successfully" });
   } catch (error) {
     return res.status(500).json({ message: `Failed to remove lecture ${error}` });
